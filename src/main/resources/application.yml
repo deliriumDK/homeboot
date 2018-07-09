@@ -1,0 +1,6 @@
+application:
+  csv-file-path: classpath:/questions.csv
+  # locale: en_US or ru_RU
+  locale-prop: ru_RU
+  def-encoding: UTF-8
+  bundle-basename: /i18n/bundle
