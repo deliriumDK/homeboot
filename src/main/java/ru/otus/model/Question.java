@@ -8,6 +8,14 @@ public class Question {
     private String answer;
     private List<String> options;
 
+    public Question() { }
+
+    public Question(String text, String answer, List<String> options) {
+        this.text = text;
+        this.answer = answer;
+        this.options = options;
+    }
+
     public String getText() {
         return text;
     }

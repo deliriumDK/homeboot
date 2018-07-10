@@ -14,13 +14,16 @@ import java.util.Scanner;
 @Service
 public class StudentTestingServiceImpl implements  StudentTestingService {
 
-    private final static int RIGHT_ANSWER = 1;
-    private final static int DEFAULT_MARK = 0;
-    private final ParserCsvService csvParser;
     private final MessageSource messageSource;
-    private final String localeFormat;
+    private final ParserCsvService csvParser;
     private final Locale localeInjViaConfig;
     private final Locale localeViaSettings;
+    private final int rightAnswer;
+    private final int defaultMark;
+    private final String msgName;
+    private final String msgAge;
+    private final String msgError;
+    private final String msgResult;
 
     @Autowired
     public StudentTestingServiceImpl(ParserCsvService csvParser,
@@ -28,10 +31,15 @@ public class StudentTestingServiceImpl implements  StudentTestingService {
                                      ApplicationSettings settings,
                                      Locale locale) {
         this.csvParser = csvParser;
-        this.messageSource = messageSource;
-        this.localeFormat = settings.getLocaleProp();
-        this.localeViaSettings = new Locale(localeFormat);
         this.localeInjViaConfig = locale;
+        this.messageSource = messageSource;
+        this.defaultMark = settings.getDefaultMark();
+        this.rightAnswer = settings.getRightAnswer();
+        this.localeViaSettings = new Locale(settings.getLocaleProp());
+        this.msgAge = settings.getMsgAge();
+        this.msgError = settings.getMsgError();
+        this.msgName = settings.getMsgName();
+        this.msgResult = settings.getMsgResult();
     }
 
     public void startStudentTesting() {
@@ -40,30 +48,30 @@ public class StudentTestingServiceImpl implements  StudentTestingService {
         greetings(student, scanner);
         questionsTest(csvParser.getQuestionList(), student, scanner);
         scanner.close();
-        System.out.println(messageSource.getMessage("result.msg.title"
+        System.out.println(messageSource.getMessage(msgResult
                 , new Object[]{student.getName(), student.getAge(), student.getMark()}
                 , localeViaSettings));
     }
 
     private void questionsTest(ArrayList<Question> questionList, Student student, Scanner scanner) {
-        student.setMark(DEFAULT_MARK);
+        student.setMark(defaultMark);
         for (Question question : questionList) {
             System.out.println(question.getText());
             System.out.println(question.getOptions());
             if (scanner.nextLine().equalsIgnoreCase(question.getAnswer())){
-                student.setMark(student.getMark() + RIGHT_ANSWER);
+                student.setMark(student.getMark() + rightAnswer);
             }
         }
     }
 
     private void greetings(Student student, Scanner scanner) {
-        System.out.print(messageSource.getMessage("name.msg.title", new String[]{}, localeInjViaConfig));
+        System.out.print(messageSource.getMessage(msgName, new String[]{}, localeInjViaConfig));
         student.setName(scanner.nextLine());
-        System.out.print(messageSource.getMessage("age.msg.title", new String[]{}, localeInjViaConfig));
+        System.out.print(messageSource.getMessage(msgAge, new String[]{}, localeInjViaConfig));
         try {
             student.setAge(Integer.valueOf(scanner.nextLine()));
         } catch (NumberFormatException e) {
-            System.out.println(messageSource.getMessage("error.msg.title", new String[]{}, localeInjViaConfig));
+            System.out.println(messageSource.getMessage(msgError, new String[]{}, localeInjViaConfig));
             greetings(student, scanner);
         }
     }

@@ -1,6 +1,21 @@
 application:
-  csv-file-path: classpath:/questions.csv
-  # locale: en_US or ru_RU
-  locale-prop: ru_RU
   def-encoding: UTF-8
+  csv-file-path: /questions.csv
   bundle-basename: /i18n/bundle
+  default-mark: 0
+  right-answer: 1
+
+  # locale: en_US or ru_RU
+  locale-prop: en_US
+
+  # csv parser mapping
+  line-locale: 0
+  line-text: 1
+  line-answer: 2
+  line-options: [3, 4, 5, 6]
+
+  # messageSource codes
+  msg-name: "name.msg.title"
+  msg-error: "error.msg.title"
+  msg-age: "age.msg.title"
+  msg-result: "result.msg.title"

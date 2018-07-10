@@ -8,6 +8,12 @@ public class Student {
 
     public Student() { }
 
+    public Student(Integer age, String name, Integer mark) {
+        this.age = age;
+        this.name = name;
+        this.mark = mark;
+    }
+
     public Integer getAge() {
         return age;
     }
