@@ -14,17 +14,23 @@ public class ParserCsvServiceImpl implements ParserCsvService {
     private final IParserCsvDao dao;
     private final String filePath;
     private final String locale;
-    private final ApplicationSettings settings;
+    private final int[] lineOptions;
+    private final int lineText;
+    private final int lineAnswer;
+    private final int lineLocale;
 
     @Autowired
     public ParserCsvServiceImpl(IParserCsvDao dao, ApplicationSettings settings) {
         this.filePath = settings.getCsvFilePath();
         this.locale = settings.getLocaleProp();
-        this.settings = settings;
+        this.lineAnswer = settings.getLineAnswer();
+        this.lineOptions = settings.getLineOptions();
+        this.lineText = settings.getLineText();
+        this.lineLocale = settings.getLineLocale();
         this.dao = dao;
     }
 
     public ArrayList<Question> getQuestionList() {
-        return dao.getQuestionList(filePath, locale, settings);
+        return dao.getQuestionList(filePath, locale, lineAnswer, lineText, lineOptions, lineLocale);
     }
 }

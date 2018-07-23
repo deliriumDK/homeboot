@@ -31,10 +31,11 @@ public class StudentTestingServiceImpl implements  StudentTestingService {
                                      ApplicationSettings settings,
                                      Locale locale) {
         this.csvParser = csvParser;
-        this.localeInjViaConfig = locale;
         this.messageSource = messageSource;
         this.defaultMark = settings.getDefaultMark();
         this.rightAnswer = settings.getRightAnswer();
+        // Вопрос: Лучше создавать "new" локаль c параметром из appSettings или делать inject bean из конфига?
+        this.localeInjViaConfig = locale;
         this.localeViaSettings = new Locale(settings.getLocaleProp());
         this.msgAge = settings.getMsgAge();
         this.msgError = settings.getMsgError();
@@ -47,7 +48,6 @@ public class StudentTestingServiceImpl implements  StudentTestingService {
         Scanner scanner = new Scanner(System.in);
         greetings(student, scanner);
         questionsTest(csvParser.getQuestionList(), student, scanner);
-        scanner.close();
         System.out.println(messageSource.getMessage(msgResult
                 , new Object[]{student.getName(), student.getAge(), student.getMark()}
                 , localeViaSettings));
@@ -65,13 +65,13 @@ public class StudentTestingServiceImpl implements  StudentTestingService {
     }
 
     private void greetings(Student student, Scanner scanner) {
-        System.out.print(messageSource.getMessage(msgName, new String[]{}, localeInjViaConfig));
+        System.out.print(messageSource.getMessage(msgName, null, localeInjViaConfig));
         student.setName(scanner.nextLine());
-        System.out.print(messageSource.getMessage(msgAge, new String[]{}, localeInjViaConfig));
+        System.out.print(messageSource.getMessage(msgAge, null, localeInjViaConfig));
         try {
             student.setAge(Integer.valueOf(scanner.nextLine()));
         } catch (NumberFormatException e) {
-            System.out.println(messageSource.getMessage(msgError, new String[]{}, localeInjViaConfig));
+            System.out.println(messageSource.getMessage(msgError, null, localeInjViaConfig));
             greetings(student, scanner);
         }
     }
